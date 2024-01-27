@@ -1,0 +1,11 @@
+# requirements.txt
+setuptools
+langchain
+python-dotenv
+wheel
+spacy
+transformers
+streamlit
+stqdm
+pandas
+spacy_streamlit
