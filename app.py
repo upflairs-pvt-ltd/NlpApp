@@ -4,6 +4,9 @@ from src.NER_extractor import Ner_extractor
 from src.question_anwering import get_respnse
 from src.sentiment_analysis import sentiment_analyser
 from src.text_generation import complete_text
+from src.vision_with_nlp import get_vision
+from src.language_translation import translator
+from PIL import Image
 import streamlit as st 
 from time import sleep
 from stqdm import stqdm
@@ -22,7 +25,7 @@ def main():
 
     # Task list for choose
     menu = ["--Select--","Summarizer","Named Entity Recognition",
-            "Sentiment Analysis","Question Answering","Text Completion"]
+            "Sentiment Analysis","Question Answering","Text Completion","NLP vision","Translate"]
     choice = st.sidebar.selectbox("Choose What u wanna do !!", menu)
 
 
@@ -107,6 +110,35 @@ def main():
         text = st.text_input('write here..',key='text')
         submit = st.button('Complete my Text')
         complete_text(user_text=text,submit=submit)
+
+    elif choice == "NLP vision":
+        st.subheader('Gemini vision with NLP')
+        text = st.text_input('write your query regarding your image :',key='text')
+        uploded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
+
+        image = ""
+        if uploded_file is not None:
+            image = Image.open(uploded_file)
+            st.image(image,caption='uploaded image',use_column_width=True)
+        submit = st.button('Submit')
+
+        if submit:
+            response = get_vision(image=image,input=text)
+            st.write("Your Response is:")
+            st.write(response)
+    
+    ## Translation
+    elif choice == "Translate":
+        st.subheader("NLP Translator 🧐")
+        st.write("This NLP Translator is available in two languages Enlgish and Hindi,You can translate your text english to hindi and hindi to english")
+        text = st.text_area("Paste your text here :")
+
+        language_list = ['eng_to_hi','hindi_to_engl']
+        choice = st.selectbox("choose your language",language_list)
+        submit = st.button('Translate')
+        if text and choice and submit:
+            response = translator(text=text,language=choice)
+            st.write(response)
 
 if __name__ == '__main__':
      main()

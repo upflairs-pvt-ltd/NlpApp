@@ -21,6 +21,6 @@ def get_respnse(question):
         template=prompt_template, input_variables=["question"])
 
     chain = LLMChain(llm=palm,prompt=PROMPT)
-    response = chain.run('Who is the prime minister of india ?')
+    response = chain.run(question)
     return response
 
